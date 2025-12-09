@@ -22,11 +22,18 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
+# Install Node.js (Required for frontend assets)
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs
+
 # Copy project files
 COPY . .
 
-# ✅ Install PHP dependencies WITHOUT running artisan at build time
+# ✅ Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+# ✅ Install Node dependencies and build assets
+RUN npm install && npm run prod
 
 # Set correct permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
