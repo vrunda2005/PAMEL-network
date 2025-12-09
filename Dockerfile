@@ -33,8 +33,14 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Configure Apache to use public folder
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf \
-    && sed -ri 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf \
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf \
     && a2enmod rewrite
+
+# Allow .htaccess to work (Fixes 404 on routes)
+RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
+    && echo "    AllowOverride All" >> /etc/apache2/apache2.conf \
+    && echo "    Require all granted" >> /etc/apache2/apache2.conf \
+    && echo "</Directory>" >> /etc/apache2/apache2.conf
 
 EXPOSE 80
