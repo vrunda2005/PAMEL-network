@@ -55,4 +55,10 @@ RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
     && echo "    Require all granted" >> /etc/apache2/apache2.conf \
     && echo "</Directory>" >> /etc/apache2/apache2.conf
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 80
+
+CMD ["docker-entrypoint.sh"]
