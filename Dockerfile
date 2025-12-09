@@ -32,6 +32,9 @@ COPY . .
 # ✅ Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
+# Fix permissions for frontend build (Fixes EACCES error)
+RUN rm -f public/mix-manifest.json && chmod -R 777 public
+
 # ✅ Install Node dependencies and build assets
 RUN npm install && npm run prod
 
