@@ -2,6 +2,15 @@
 
 use Illuminate\Support\Str;
 
+$db_connection = env('DB_CONNECTION', 'mysql');
+
+if (str_starts_with($db_connection, 'postgres://') || str_starts_with($db_connection, 'postgresql://')) {
+    putenv("DATABASE_URL={$db_connection}");
+    putenv("DB_CONNECTION=pgsql");
+    $_ENV['DATABASE_URL'] = $db_connection;
+    $_ENV['DB_CONNECTION'] = 'pgsql';
+}
+
 return [
 
     /*
