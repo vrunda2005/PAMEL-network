@@ -1,5 +1,5 @@
-# Use PHP 8.1 with Apache (Laravel compatible)
-FROM php:8.1-apache
+# Use PHP 8.0 with Apache (Compatible with Laravel 7)
+FROM php:8.0-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
