@@ -36,7 +36,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 RUN rm -f public/mix-manifest.json && chmod -R 777 public
 
 # ✅ Install Node dependencies and build assets
-RUN npm install && npm run prod
+RUN npm config set cache /tmp/npm-cache --global \
+    && npm install --no-audit \
+    && npm run prod
 
 # Set correct permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
